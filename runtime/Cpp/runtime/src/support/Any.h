@@ -24,21 +24,17 @@ struct Any
   bool isNull() const { return _ptr == nullptr; }
   bool isNotNull() const { return _ptr != nullptr; }
 
-  Any() : _ptr(nullptr) {
-  }
+  Any() = delete;
 
-  Any(Any& that) : _ptr(that.clone()) {
-  }
+  Any(Any& that) = delete;
 
   Any(Any&& that) : _ptr(that._ptr) {
     that._ptr = nullptr;
   }
 
-  Any(const Any& that) : _ptr(that.clone()) {
-  }
+  Any(const Any& that) = delete;
 
-  Any(const Any&& that) : _ptr(that.clone()) {
-  }
+  Any(const Any&& that) = delete;
 
   template<typename U>
   Any(U&& value) : _ptr(new Derived<StorageType<U>>(std::forward<U>(value))) {
@@ -67,21 +63,10 @@ struct Any
 
   template<class U>
   operator U() {
-    return as<StorageType<U>>();
+    return std::move(as<StorageType<U>>());
   }
 
-  Any& operator = (const Any& a) {
-    if (_ptr == a._ptr)
-      return *this;
-
-    auto old_ptr = _ptr;
-    _ptr = a.clone();
-
-    if (old_ptr)
-      delete old_ptr;
-
-    return *this;
-  }
+  Any& operator = (const Any& a) = delete;
 
   Any& operator = (Any&& a) {
     if (_ptr == a._ptr)
@@ -103,7 +88,6 @@ struct Any
 private:
   struct Base {
     virtual ~Base() { }
-    virtual Base* clone() const = 0;
   };
 
   template<typename T>
@@ -114,19 +98,7 @@ private:
 
     T value;
 
-    Base* clone() const {
-      return new Derived<T>(value);
-    }
-
   };
-
-  Base* clone() const
-  {
-    if (_ptr)
-      return _ptr->clone();
-    else
-      return nullptr;
-  }
 
   Base *_ptr;
 
