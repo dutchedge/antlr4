@@ -1,3 +1,5 @@
+set(CMAKE_C_COMPILER /usr/bin/gcc-5)
+set(CMAKE_CXX_COMPILER /usr/bin/g++-5)
 
 include_directories(
   ${PROJECT_SOURCE_DIR}/runtime/src

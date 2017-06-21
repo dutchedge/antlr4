@@ -3,6 +3,9 @@ if(NOT UNIX)
   message(FATAL "Unsupported operating system")
 endif()
 
+set(CMAKE_C_COMPILER /usr/bin/gcc-5)
+set(CMAKE_CXX_COMPILER /usr/bin/g++-5)
+
 set(antlr4-demo-GENERATED_SRC
    ${PROJECT_SOURCE_DIR}/demo/generated/TLexer.cpp 
    ${PROJECT_SOURCE_DIR}/demo/generated/TParser.cpp
